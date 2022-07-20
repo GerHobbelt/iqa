@@ -36,6 +36,10 @@ RELDIR=release
 CFLAGS=-O2 -Wall
 endif
 
+ifneq ($(shell uname -m), i386)
+    CFLAGS += -fPIC
+endif
+
 OUT = $(OUTDIR)/$(RELDIR)/$(PLIB)
 
 .c.o:
@@ -66,7 +70,7 @@ install:
 	$(INSTALL) -d $(LIBPREFIX)/pkgconfig
 	$(INSTALL) -m 0644 $(PNAME).pc $(LIBPREFIX)/pkgconfig
 	$(INSTALL) -d $(DOCPREFIX)
-	$(INSTALL) -m 0644 CHANGELOG.txt LICENSE README.txt $(DOCPREFIX)
+	$(INSTALL) -m 0644 CHANGELOG.txt LICENSE README.md $(DOCPREFIX)
 
 uninstall:
 	$(RM) $(LIBPREFIX)/$(PLIB).a
