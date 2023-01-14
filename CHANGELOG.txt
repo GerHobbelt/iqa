@@ -1,3 +1,7 @@
+2023-01-14  1.1.3 (rev 41)
+
+ - Added VIFP 1 layer (The visual information fidelity (VIF))
+
 2011-07-06  1.1.2 (rev 40)
 
  - Fixed MS-SSIM seg-fault issue when height greater than width (#3349231).

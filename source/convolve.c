@@ -7,7 +7,7 @@
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- * - Redistributions of source code must retain the above copyright notice, 
+ * - Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
  *
  * - Redistributions in binary form must reproduce the above copyright notice,
@@ -21,8 +21,8 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
@@ -68,7 +68,8 @@ static float _calc_scale(const struct _kernel *k)
 
     if (k->normalized)
         return 1.0f;
-    else {
+    else
+    {
         k_len = k->w * k->h;
         for (ii=0; ii<k_len; ++ii)
             sum += k->kernel[ii];
@@ -97,15 +98,19 @@ void _iqa_convolve(float *img, int w, int h, const struct _kernel *k, float *res
     /* Kernel is applied to all positions where the kernel is fully contained
      * in the image */
     scale = _calc_scale(k);
-    for (y=0; y < dst_h; ++y) {
-        for (x=0; x < dst_w; ++x) {
+    for (y=0; y < dst_h; ++y)
+    {
+        for (x=0; x < dst_w; ++x)
+        {
             sum = 0.0;
             k_offset = 0;
             ky = y+vc;
             kx = x+uc;
-            for (v=-vc; v <= vc-kh_even; ++v) {
+            for (v=-vc; v <= vc-kh_even; ++v)
+            {
                 img_offset = (ky+v)*w + kx;
-                for (u=-uc; u <= uc-kw_even; ++u, ++k_offset) {
+                for (u=-uc; u <= uc-kw_even; ++u, ++k_offset)
+                {
                     sum += img[img_offset+u] * k->kernel[k_offset];
                 }
             }
@@ -126,7 +131,8 @@ int _iqa_img_filter(float *img, int w, int h, const struct _kernel *k, float *re
     if (!k || !k->bnd_opt)
         return 1;
 
-    if (!dst) {
+    if (!dst)
+    {
         dst = (float*)malloc(w*h*sizeof(float));
         if (!dst)
             return 2;
@@ -135,17 +141,22 @@ int _iqa_img_filter(float *img, int w, int h, const struct _kernel *k, float *re
     scale = _calc_scale(k);
 
     /* Kernel is applied to all positions where top-left corner is in the image */
-    for (y=0; y < h; ++y) {
-        for (x=0; x < w; ++x) {
+    for (y=0; y < h; ++y)
+    {
+        for (x=0; x < w; ++x)
+        {
             dst[y*w + x] = _iqa_filter_pixel(img, w, h, x, y, k, scale);
         }
     }
 
     /* If no result buffer given, copy results to image buffer */
-    if (!result) {
-        for (y=0; y<h; ++y) {
+    if (!result)
+    {
+        for (y=0; y<h; ++y)
+        {
             img_offset = y*w;
-            for (x=0; x<w; ++x, ++img_offset) {
+            for (x=0; x<w; ++x, ++img_offset)
+            {
                 img[img_offset] = dst[img_offset];
             }
         }
@@ -180,9 +191,11 @@ float _iqa_filter_pixel(const float *img, int w, int h, int x, int y, const stru
 
     sum = 0.0;
     k_offset = 0;
-    for (v=-vc; v <= vc-kh_even; ++v) {
+    for (v=-vc; v <= vc-kh_even; ++v)
+    {
         img_offset = (y+v)*w + x;
-        for (u=-uc; u <= uc-kw_even; ++u, ++k_offset) {
+        for (u=-uc; u <= uc-kw_even; ++u, ++k_offset)
+        {
             if (!edge)
                 sum += img[img_offset+u] * k->kernel[k_offset];
             else

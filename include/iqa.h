@@ -7,7 +7,7 @@
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- * - Redistributions of source code must retain the above copyright notice, 
+ * - Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
  *
  * - Redistributions in binary form must reproduce the above copyright notice,
@@ -21,8 +21,8 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
@@ -39,7 +39,8 @@
 /**
  * Allows fine-grain control of the SSIM algorithm.
  */
-struct iqa_ssim_args {
+struct iqa_ssim_args
+{
     float alpha;    /**< luminance exponent */
     float beta;     /**< contrast exponent */
     float gamma;    /**< structure exponent */
@@ -52,13 +53,24 @@ struct iqa_ssim_args {
 /**
  * Allows fine-grain control of the MS-SSIM algorithm.
  */
-struct iqa_ms_ssim_args {
+struct iqa_ms_ssim_args
+{
     int wang;             /**< 1=original algorithm by Wang, et al. 0=MS-SSIM* by Rouse/Hemami (default). */
     int gaussian;         /**< 1=11x11 Gaussian window (default). 0=8x8 linear window. */
     int scales;           /**< Number of scaled images to use. Default is 5. */
     const float *alphas;  /**< Pointer to array of alpha values for each scale. Required if 'scales' isn't 5. */
     const float *betas;   /**< Pointer to array of beta values for each scale. Required if 'scales' isn't 5. */
     const float *gammas;  /**< Pointer to array of gamma values for each scale. Required if 'scales' isn't 5. */
+};
+
+/**
+ * Allows fine-grain control of the VIFP1 algorithm.
+ */
+struct iqa_vifp_args
+{
+    float eps;       /**< not /0 */
+    float sigma_nsq; /**< base stdev */
+    int f;           /**< scale factor. 0=default scaling, 1=no scaling */
 };
 
 /**
@@ -105,8 +117,8 @@ float iqa_psnr(const unsigned char *ref, const unsigned char *cmp, int w, int h,
  * defaults. Defaults are a=b=g=1.0, L=255, K1=0.01, K2=0.03
  * @return The mean SSIM over the entire image (MSSIM), or INFINITY if error.
  */
-float iqa_ssim(const unsigned char *ref, const unsigned char *cmp, int w, int h, int stride, 
-    int gaussian, const struct iqa_ssim_args *args);
+float iqa_ssim(const unsigned char *ref, const unsigned char *cmp, int w, int h, int stride,
+               int gaussian, const struct iqa_ssim_args *args);
 
 /**
  * Calculates the Multi-Scale Structural SIMilarity between 2 equal-sized 8-bit
@@ -128,7 +140,33 @@ float iqa_ssim(const unsigned char *ref, const unsigned char *cmp, int w, int h,
  * for defaults. Defaults are wang=0, scales=5, gaussian=1.
  * @return The mean MS-SSIM over the entire image, or INFINITY if error.
  */
-float iqa_ms_ssim(const unsigned char *ref, const unsigned char *cmp, int w, int h, int stride, 
-    const struct iqa_ms_ssim_args *args);
+float iqa_ms_ssim(const unsigned char *ref, const unsigned char *cmp, int w, int h, int stride,
+                  const struct iqa_ms_ssim_args *args);
+
+/**
+ * Calculates the VIFP 1 level between 2 equal-sized 8-bit images.
+ *
+ * Laboratory for Image and Video Engineering (LIVE),
+ *              The University of Texas at Austin
+ *              http://live.ece.utexas.edu
+ * All rights reserved.
+ * Author: Philippe Hanhart (philippe.hanhart@epfl.ch)
+ * See http://live.ece.utexas.edu/publications.php
+ *
+ * @note The images must have the same width, height, and stride.
+ * @param ref Original reference image
+ * @param cmp Distorted image
+ * @param w Width of the images
+ * @param h Height of the images
+ * @param stride The length (in bytes) of each horizontal line in the image.
+ *               This may be different from the image width.
+ * @param gaussian 0 = 8x8 square window, 1 = 11x11 circular-symmetric Gaussian
+ * weighting.
+ * @param args Optional SSIM arguments for fine control of the algorithm. 0 for
+ * defaults. Defaults are eps = 1e-10, sigma_nsq = 2.0.
+ * @return The VIFP1 the image, or INFINITY if error.
+ */
+float iqa_vifp1(const unsigned char *ref, const unsigned char *cmp, int w, int h, int stride,
+                int gaussian, const struct iqa_vifp_args *args);
 
 #endif /*_IQA_H_*/
