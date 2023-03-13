@@ -33,7 +33,7 @@ RELDIR=debug
 CFLAGS=-g -Wall
 else
 RELDIR=release
-CFLAGS=-O2 -Wall
+CFLAGS+=-O3 -Wall
 endif
 
 ifneq ($(shell uname -m), i386)
@@ -48,7 +48,7 @@ OUT = $(OUTDIR)/$(RELDIR)/$(PLIB)
 $(OUT).a: $(OBJ)
 	mkdir -p $(OUTDIR)/$(RELDIR)
 	$(ARC) $(OUT).a $(OBJ)
-	$(CC) -shared -Wl,-soname,$(PLIB).so.$(VERSION_MAJOR) -o $(OUT).so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_RELEASE) $(OBJ)
+	$(CC) -shared -Wl,-soname,$(PLIB).so.$(VERSION_MAJOR) -o $(OUT).so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_RELEASE) $(OBJ) $(LDFLAGS)
 	mv $(OBJ) $(OUTDIR)/$(RELDIR)
 
 clean:
