@@ -29,3 +29,8 @@ USE:
   - Call iqa_* methods.
   - Link against the IQA library.
 
+
+HELP & SUPPORT:
+
+  Further help can be found at: https://sourceforge.net/projects/iqa/support
+
