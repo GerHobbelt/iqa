@@ -30,6 +30,9 @@ All build artifacts end up in build/<configuration>, where <configuration> is 'd
   - Call iqa_* methods.
   - Link against the IQA library.
 
+### TEST IMAGES:
+
+[Images for tests](test/resources/) are in [libiqa-testimages](https://github.com/ImageProcessing-ElectronicPublications/libiqa-testimages)
 
 ### HELP & SUPPORT:
 
